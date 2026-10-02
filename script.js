@@ -35,10 +35,13 @@ const frasesNo = [
   'no puedes decir no 💔'
 ];
 
+// ====== Lógica del botón "no" ======
+const MAX_INTENTOS = 5;   // 👈 Cambia este número: clics hasta desaparecer
+
 noBtn.addEventListener('click', () => {
   noCount++;
-  yesScale += 0.35;         // El sí crece
-  noScale = Math.max(0.4, noScale - 0.1); // El no se encoge
+  yesScale += 0.35;                        // El SÍ crece
+  noScale = Math.max(0.8, noScale - 0.05); // El NO se encoge poquito
 
   yesBtn.style.transform = `scale(${yesScale})`;
   yesBtn.style.fontSize = (1.1 * Math.min(yesScale, 2.2)) + 'rem';
@@ -46,11 +49,21 @@ noBtn.addEventListener('click', () => {
   noBtn.style.transform = `scale(${noScale})`;
   noBtn.textContent = frasesNo[Math.min(noCount, frasesNo.length - 1)];
 
-  // El botón no se mueve un poco para despistar
+  // Mueve un poquito el botón "no" para despistar
   const x = (Math.random() - 0.5) * 60;
   const y = (Math.random() - 0.5) * 40;
   noBtn.style.marginLeft = x + 'px';
   noBtn.style.marginTop = y + 'px';
+
+  // 👇 Si ya alcanzó el máximo de intentos, desaparece
+  if (noCount >= MAX_INTENTOS) {
+    noBtn.classList.add('gone');
+
+    // Después de que desaparezca, lo quitamos del layout
+    setTimeout(() => {
+      noBtn.style.display = 'none';
+    }, 700);
+  }
 });
 
 yesBtn.addEventListener('click', () => {
